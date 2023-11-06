@@ -1,21 +1,11 @@
 package com.jrl.exercise;
 
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@RestController
-public class VINValidatorController {
+public class VinChecker {
 
-    @GetMapping("/jlrExercise")
-    public String jlrUrl() {
-        return checkVinFormat("0471958692");
-    }
-
-    public String checkVinFormat (String vin) {
+    public boolean checkVinFormat (String vin) {
         /* example correct vin 0471958692
              The check digit is calculated by:
                 ○ multiplying each digit by its position
@@ -36,8 +26,25 @@ public class VINValidatorController {
 
                 what if sum % 11 = 10
          */
-        Pattern vinPattern = Pattern.compile("\\d{10}");
+        Pattern vinPattern = Pattern.compile("[0-9]{9}-(1[0-9]|[0-9])");
         Matcher vinMatcher = vinPattern.matcher(vin);
-        return String.valueOf(vinMatcher.matches());
+        if(!vinMatcher.matches()) return false; // to avoid exceptions below
+
+        int sum = 0;
+        int counter = 0;
+        int checkDigit = -1;
+        for (char c : vin.toCharArray()) {
+            if (counter < 9) {
+                sum += Character.getNumericValue(c) * counter;
+            } else {
+                checkDigit = Integer.parseInt(vin.substring(1 + counter));
+                break;
+            }
+            counter++;
+
+        }
+
+        return sum % 11 == checkDigit;
     }
+
 }
