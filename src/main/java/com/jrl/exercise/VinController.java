@@ -1,17 +1,10 @@
 package com.jrl.exercise;
 
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.util.ArrayList;
 
 @RestController
-@RequestMapping("./")
 public class VinController {
 
     private final VinService vinService;
@@ -20,27 +13,29 @@ public class VinController {
         this.vinService = vinService;
     }
 
-    @GetMapping("/{vin}")
-    public ResponseEntity<String> getVin(@PathVariable String vin) {
-        return ResponseEntity.ok(vinService.getVin(vin));
-    }
-
-    @GetMapping("/vinRepository")
-    public ResponseEntity<ArrayList<String>> getAllVins() {
-        return ResponseEntity.ok(vinService.getAllVins());
-    }
-
-    @PostMapping
-    public ResponseEntity<Void> createVin(@RequestBody String vin, UriComponentsBuilder uriComponentsBuilder) {
-        boolean b = vinService.createVin(vin);
-        HttpHeaders headers = new HttpHeaders();
-
-        if (b) {
-            UriComponents uriComponents = uriComponentsBuilder.path("/{vin}").buildAndExpand(vin);
-            headers.setLocation(uriComponents.toUri());
-            return new ResponseEntity<>(headers, HttpStatus.CREATED);
+    @PostMapping(value = "/temp")
+    public ResponseEntity<String> createVin(@RequestBody String vin) {
+        if (vinService.createVin(vin)) {
+            return new ResponseEntity<>(String.valueOf(true), HttpStatus.CREATED);
         }
+        return new ResponseEntity<>(String.valueOf(false), HttpStatus.NOT_ACCEPTABLE);
+    }
 
-        return new ResponseEntity<>(headers, HttpStatus.NOT_ACCEPTABLE);
+    @GetMapping("/temp/{vin}")
+    public ResponseEntity<Boolean> getVinValidation(@PathVariable String vin) {
+        if (vinService.getVin(vin)) {
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/temp/repository")
+    public ResponseEntity<String> getVinRepository() {
+        try {
+            vinService.getVinRepository();
+            return new ResponseEntity<>(vinService.getVinRepository(), HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(vinService.getVinRepository(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

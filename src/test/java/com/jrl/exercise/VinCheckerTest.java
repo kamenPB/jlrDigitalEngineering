@@ -10,6 +10,7 @@ class VinCheckerTest {
         VinChecker vinChecker = new VinChecker();
         assertTrue(vinChecker.checkVinFormat("047195869-2"));
         assertTrue(vinChecker.checkVinFormat("089195869-10"));
+        assertFalse(vinChecker.checkVinFormat("047195869-6"));
         assertFalse(vinChecker.checkVinFormat("082195869a-10"));
     }
 }

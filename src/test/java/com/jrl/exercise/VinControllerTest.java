@@ -1,6 +1,6 @@
 package com.jrl.exercise;
 
-import org.hamcrest.Matchers;
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -8,9 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
-import java.util.ArrayList;
+import static org.hamcrest.Matchers.*;
 
 @WebMvcTest(VinController.class)
 class VinControllerTest {
@@ -27,69 +26,57 @@ class VinControllerTest {
     }
 
     @Test
-    void shouldAllowVINCreation() {
-
-        String testCorrectVin = "0471958692";
-
-        Mockito.when(vinService.createVin(testCorrectVin)).thenReturn(true);
+    public void shouldBeAbleToCreateVin() {
+        String vin = "047195869-2";
+        Mockito.when(vinService.createVin(vin)).thenReturn(true);
 
         RestAssuredMockMvc
-            .given()
-                .body(testCorrectVin)
-            .when()
-                .post("./")
-            .then()
-                .statusCode(201)
-                .header("Location", Matchers.containsString(String.format("/%s", testCorrectVin)));
+                .given().body(vin)
+                .when().post("/temp")
+                .then().assertThat().statusCode(201)
+                .body(equalTo("true"));
     }
 
     @Test
-    void shouldNotAllowVINCreation() {
-
-        String testWrongVin = "0471";
-
-        Mockito.when(vinService.createVin(testWrongVin)).thenReturn(false);
+    public void shouldNotBeAbleToCreateInvalidVin() {
+        String vin = "047195869-6";
+        Mockito.when(vinService.createVin(vin)).thenReturn(false);
 
         RestAssuredMockMvc
-            .given()
-                .body(testWrongVin)
-            .when()
-                .post("./")
-            .then()
-                .statusCode(406);
+                .given().body(vin)
+                .when().post("/temp")
+                .then().assertThat().statusCode(406)
+                .body(equalTo("false"));
     }
 
     @Test
-    void shouldBeAbleToRetrieveAnyVIN() {
-
-        String testCorrectVin = "0471958692";
-
-        Mockito.when(vinService.getVin(testCorrectVin)).thenReturn(testCorrectVin);
+    public void vinShouldBeInRepository() {
+        String vin = "047195869-2";
+        Mockito.when(vinService.getVinRepository()).thenReturn("Current VINs: ".concat(vin));
 
         RestAssuredMockMvc
-            .given()
-                .body(testCorrectVin)
-            .when()
-                .get(String.format("./%s", testCorrectVin))
-            .then()
-                .statusCode(200);
+                .given().when().get("/temp/repository")
+                .then().assertThat().statusCode(200)
+                .body(containsString(vin));
+
     }
 
     @Test
-    void shouldBeAbleToRetrieveAllVINs() {
-
-        String testCorrectVin = "0471958692";
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add(testCorrectVin);
-
-        Mockito.when(vinService.getAllVins()).thenReturn(arrayList);
+    public void vinShouldNotBeInRepository() {
+        String vin = "047195869-6";
+        Mockito.when(vinService.getVinRepository()).thenReturn("Current VINs: ");
 
         RestAssuredMockMvc
-            .given()
-                .body("vinRepository")
-            .when()
-                .get("/")
-            .then()
-                .statusCode(200);
+                .given().when().get("/temp/repository")
+                .then().assertThat().statusCode(200)
+                .body(not(containsString(vin)));
     }
+
+    @Test
+    public void shouldNotBeAbleToGetInvalidVin() {
+        RestAssuredMockMvc
+                .given().when().get("/temp/4040")
+                .then().statusCode(404);
+    }
+
 }
