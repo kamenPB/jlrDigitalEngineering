@@ -10,8 +10,8 @@ import java.util.regex.Pattern;
 @RestController
 public class VINValidatorController {
 
-    @GetMapping("/")
-    public String index() {
+    @GetMapping("/jlrExercise")
+    public String jlrUrl() {
         return checkVinFormat("0471958692");
     }
 
