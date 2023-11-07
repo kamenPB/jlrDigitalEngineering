@@ -13,7 +13,7 @@ public class VinController {
         this.vinService = vinService;
     }
 
-    @PostMapping(value = "/temp")
+    @PostMapping
     public ResponseEntity<String> createVin(@RequestBody String vin) {
         if (vinService.createVin(vin)) {
             return new ResponseEntity<>(String.valueOf(true), HttpStatus.CREATED);
@@ -23,7 +23,7 @@ public class VinController {
 
     @GetMapping("/temp/{vin}")
     public ResponseEntity<Boolean> getVinValidation(@PathVariable String vin) {
-        if (vinService.getVin(vin)) {
+        if (vinService.getVinValidation(vin)) {
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
         return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);

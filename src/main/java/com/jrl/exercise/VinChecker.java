@@ -11,20 +11,6 @@ public class VinChecker {
                 ○ multiplying each digit by its position
                 ○ adding the results together
                 ○ then taking modulo 11 of the total.
-
-                0 * 0 = 0
-                4 * 1 = 4
-                7 * 2 = 14
-                1 * 3 = 3
-                9 * 4 = 36
-                5 * 5 = 25
-                8 * 6 = 48
-                6 * 7 = 42
-                9 * 8 = 72
-                sum = 244
-                244 % 11 = 2
-
-                what if sum % 11 = 10
          */
         Pattern vinPattern = Pattern.compile("[0-9]{9}-(1[0-9]|[0-9])");
         Matcher vinMatcher = vinPattern.matcher(vin);
