@@ -13,7 +13,7 @@ public class VinController {
         this.vinService = vinService;
     }
 
-    @PostMapping(value = "/temp")
+    @PostMapping
     public ResponseEntity<String> createVin(@RequestBody String vin) {
         if (vinService.createVin(vin)) {
             return new ResponseEntity<>(String.valueOf(true), HttpStatus.CREATED);

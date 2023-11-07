@@ -32,7 +32,7 @@ class VinControllerTest {
 
         RestAssuredMockMvc
                 .given().body(vin)
-                .when().post("/temp")
+                .when().post()
                 .then().assertThat().statusCode(201)
                 .body(equalTo("true"));
     }
@@ -44,7 +44,7 @@ class VinControllerTest {
 
         RestAssuredMockMvc
                 .given().body(vin)
-                .when().post("/temp")
+                .when().post()
                 .then().assertThat().statusCode(406)
                 .body(equalTo("false"));
     }
