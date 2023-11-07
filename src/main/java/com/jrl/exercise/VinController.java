@@ -23,7 +23,7 @@ public class VinController {
 
     @GetMapping("/temp/{vin}")
     public ResponseEntity<Boolean> getVinValidation(@PathVariable String vin) {
-        if (vinService.getVin(vin)) {
+        if (vinService.getVinValidation(vin)) {
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
         return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);

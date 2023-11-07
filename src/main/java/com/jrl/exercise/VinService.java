@@ -20,7 +20,7 @@ public class VinService {
         return false;
     }
 
-    public boolean getVin(String vin) {
+    public boolean getVinValidation(String vin) {
         for (String v: vinRepository) {
             if (v.equals(vin)) return true;
         }
