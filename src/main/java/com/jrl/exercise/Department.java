@@ -2,10 +2,10 @@ package com.jrl.exercise;
 
 public class Department {
 
-    private long id;
+    private int id;
     private String departmentName;
 
-    public Department(long id, String departmentName) {
+    public Department(int id, String departmentName) {
         this.id = id;
         this.departmentName = departmentName;
     }
