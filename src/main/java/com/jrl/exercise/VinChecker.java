@@ -27,7 +27,6 @@ public class VinChecker {
                 break;
             }
             counter++;
-
         }
 
         return sum % 11 == checkDigit;

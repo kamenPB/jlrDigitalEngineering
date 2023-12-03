@@ -58,7 +58,6 @@ class VinControllerTest {
                 .given().when().get("/temp/repository")
                 .then().assertThat().statusCode(200)
                 .body(containsString(vin));
-
     }
 
     @Test
