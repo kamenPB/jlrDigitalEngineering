@@ -1,12 +1,8 @@
 package com.jrl.exercise;
 
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -40,12 +36,12 @@ public class EmployeesController {
     }
 
     @RequestMapping("/departments/top")
-    public String getTopEarnersInEachDepartment() {
+    public List<Employee> getTopEarnersInEachDepartment() {
         return employeeService.getTopEarnersInEachDepartment();
     }
 
     @RequestMapping("departments/count")
-    public String getEmployeeNumberForEachDepartment() {
+    public List<EmployeeCounter> getEmployeeNumberForEachDepartment() {
         return employeeService.getEmployeeNumberForEachDepartment();
     }
 

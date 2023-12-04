@@ -3,7 +3,12 @@ package com.jrl.exercise;
 public class Department {
 
     private int id;
+
     private String departmentName;
+
+    public Department() {
+
+    }
 
     public Department(int id, String departmentName) {
         this.id = id;

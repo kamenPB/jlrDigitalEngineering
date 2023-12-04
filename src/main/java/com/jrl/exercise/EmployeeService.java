@@ -1,8 +1,7 @@
 package com.jrl.exercise;
 
-import org.springframework.core.env.Environment;
+import org.assertj.core.groups.Tuple;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.*;
 
@@ -75,10 +74,12 @@ public class EmployeeService {
         return false;
     }
 
-    public String getTopEarnersInEachDepartment() {
-        HashMap<String, List<Employee>> topEarnersInDepartment = new HashMap<>();
+    public List<Employee> getTopEarnersInEachDepartment() {
+        HashMap<String, List<Employee>> topEarnersInDepartmentHashMap = new HashMap<>();
+        List<Employee> topEarnersList = new ArrayList<>();
+
         for (Employee employee : employeeList) {
-            List<Employee> topEarningEmployeeList = topEarnersInDepartment.get(employee.getDepartment().getDepartmentName());
+            List<Employee> topEarningEmployeeList = topEarnersInDepartmentHashMap.get(employee.getDepartment().getDepartmentName());
             if (topEarningEmployeeList != null) {
                 for (Employee employeeInDepartment : topEarningEmployeeList) {
                     if (employee.getSalary() > employeeInDepartment.getSalary()) {
@@ -89,22 +90,23 @@ public class EmployeeService {
                     }
                 }
             } else {
-                topEarnersInDepartment.put(employee.getDepartment().getDepartmentName(), new ArrayList<>(Arrays.asList(employee)));
+                topEarnersInDepartmentHashMap.put(employee.getDepartment().getDepartmentName(), new ArrayList<>(Arrays.asList(employee)));
             }
         }
 
-        if (!topEarnersInDepartment.isEmpty()) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (Map.Entry entry : topEarnersInDepartment.entrySet()) {
-                stringBuilder.append(entry.getKey()).append("--->").append(entry.getValue().toString());
+        if (!topEarnersInDepartmentHashMap.isEmpty()) {
+            for (Map.Entry<String, List<Employee>> entry : topEarnersInDepartmentHashMap.entrySet()) {
+                topEarnersList.addAll(entry.getValue());
             }
-            return stringBuilder.toString();
+            return topEarnersList;
         } else return null;
 
     }
 
-    public String getEmployeeNumberForEachDepartment() {
+    public List<EmployeeCounter> getEmployeeNumberForEachDepartment() {
         HashMap<String, Integer> employeeCounterMap = new HashMap<>();
+        List<EmployeeCounter> employeeCounterList = new ArrayList<>();
+
         for (Employee employee : employeeList) {
             Integer employeeCounter = employeeCounterMap.get(employee.getDepartment().getDepartmentName());
             if (employeeCounter != null) {
@@ -115,11 +117,10 @@ public class EmployeeService {
         }
 
         if (!employeeCounterMap.isEmpty()) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (Map.Entry entry : employeeCounterMap.entrySet()) {
-                stringBuilder.append(entry.getKey()).append("--->").append(entry.getValue());
+            for (Map.Entry<String, Integer> entry : employeeCounterMap.entrySet()) {
+                employeeCounterList.add(new EmployeeCounter(entry.getKey(), entry.getValue()));
             }
-            return stringBuilder.toString();
+            return employeeCounterList;
         } else return null;
     }
 }
