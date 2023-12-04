@@ -1,25 +1,39 @@
 package com.jrl.exercise;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "employee")
 public class Employee {
 
-    private int id;
-    private String name;
-    private int salary;
-    private Department department;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    public Employee () {
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "age")
+    private int age;
+
+    @ManyToOne
+    @JoinColumn(name="id", nullable=false)
+    private long departmentId;
+
+    public Employee() {
 
     }
 
-    public Employee(int id, String name, int salary, Department department) {
+    public Employee(long id, String name, int age, long departmentId) {
         super();
         this.id = id;
         this.name = name;
-        this.salary = salary;
-        this.department = department;
+        this.age = age;
+        this.departmentId = departmentId;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -27,21 +41,11 @@ public class Employee {
         return name;
     }
 
-    public long getSalary() {
-        return salary;
+    public int getAge() {
+        return age;
     }
 
-    public Department getDepartment() {
-        return department;
-    }
-
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", salary=" + salary +
-                ", department=" + department +
-                '}';
+    public long getDepartmentId() {
+        return departmentId;
     }
 }
