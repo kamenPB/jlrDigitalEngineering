@@ -30,7 +30,7 @@ public class EmployeeTests {
         ResponseEntity<String> response = template.exchange(EMPLOYEES_URL, HttpMethod.GET, httpEntity, String.class);
         assertTrue(response.getStatusCode().is2xxSuccessful());
 
-        String expectedResponse = "[ { 'id': 1 }, { 'id': 2 }, { 'id': 3 }, { 'id': 4 } ]";
+        String expectedResponse = "[ { 'id': 1 }, { 'id': 2 }, { 'id': 3 }, { 'id': 4 } ]"; // ORDER should not matter (json path expressions)
         assertEquals("application/json", response.getHeaders().get("Content-Type").get(0));
         JSONAssert.assertEquals(expectedResponse, response.getBody(), false);
     }
@@ -48,18 +48,28 @@ public class EmployeeTests {
         JSONAssert.assertEquals(expectedResponse, response.getBody(), false);
     }
 
+
+    // try json map in request
     @Test
     void addNewEmployee_SuccessTest() throws JSONException {
-        String requestBody = "{ 'id': 5, 'name': 'E', 'salary': 25000, 'department': { 'id': 2, 'departmentName': 'Finance' } }";
+        String requestBody = "{" +
+                "    \"id\": 5," +
+                "    \"name\": \"E\"," +
+                "    \"salary\": 25000," +
+                "    \"department\": {" +
+                "    \"id\": 2," +
+                "    \"departmentName\": \"Finance\"" +
+                "    }" +
+                "}";
         HttpHeaders headers = createHttpContentTypeHeaders();
         HttpEntity<String> httpEntity = new HttpEntity<String>(requestBody, headers);
         ResponseEntity<String> response = template.exchange(EMPLOYEES_URL, HttpMethod.POST, httpEntity, String.class);
 //        System.out.println(response.getHeaders());
-//        assertTrue(response.getStatusCode().is2xxSuccessful());
-//        assertEquals("application/json", response.getHeaders().get("Content-Type").get(0));
+        assertTrue(response.getStatusCode().is2xxSuccessful());
+        assertEquals("text/plain", response.getHeaders().get("Content-Type").get(0));
 
         String expectedResponse = "Employee added successfully";
-//        JSONAssert.assertEquals(expectedResponse, response.getBody(), false);
+        JSONAssert.assertEquals(expectedResponse, response.getBody(), false);
     }
 
     @Test
