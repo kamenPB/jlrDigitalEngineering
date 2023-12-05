@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "employee")
+@Table(name = "employees")
 public class Employee {
 
     @Id
@@ -17,17 +17,15 @@ public class Employee {
     @Column(name = "age")
     private int age;
 
-    @ManyToOne
-    @JoinColumn(name="id", nullable=false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="departmentId")
     private long departmentId;
 
     public Employee() {
 
     }
 
-    public Employee(long id, String name, int age, long departmentId) {
-        super();
-        this.id = id;
+    public Employee(String name, int age, long departmentId) {
         this.name = name;
         this.age = age;
         this.departmentId = departmentId;

@@ -1,13 +1,16 @@
 package com.jrl.exercise;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name =  "departments")
 public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @OneToMany(mappedBy="departmentId")
+    @OneToMany(mappedBy="departmentId", cascade = CascadeType.ALL)
+    @JsonIgnore
     private long id;
     private String departmentName;
 
@@ -15,9 +18,7 @@ public class Department {
 
     }
 
-    public Department(long id, String departmentName) {
-        super();
-        this.id = id;
+    public Department(String departmentName) {
         this.departmentName = departmentName;
     }
 

@@ -12,9 +12,9 @@ public class CommandLineRunner implements org.springframework.boot.CommandLineRu
     @Override
     public void run(String... args) throws Exception {
 
-        appRepository.insertDepartment(new Department(1, "Finance"));
-        appRepository.insertEmployee(new Employee(1, "Kamen", 25, 1));
-        appRepository.insertEmployee(new Employee(2, "Moni", 29, 1));
+        appRepository.insertDepartment(new Department("Finance"));
+        appRepository.insertEmployee(new Employee("Kamen", 25, 1));
+        appRepository.insertEmployee(new Employee("Moni", 29, 1));
 
 //        appRepository.deleteEmployeeById(1);
 

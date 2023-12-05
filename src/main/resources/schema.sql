@@ -1,16 +1,14 @@
-create table department
+create table departments
 (
-    id bigint not null AUTO_INCREMENT,
-    departmentName varchar(255) not null,
-    primary key (id)
+    id serial primary key,
+    departmentName varchar(255) not null
 );
 
-create table employee
+create table employees
 (
-    id bigint not null AUTO_INCREMENT,
+    id serial primary key,
     name varchar(255) not null,
     age int not null,
     departmentId bigint not null,
-    primary key (id),
-    foreign key (id) references department(id)
+    foreign key (departmentId) references departments(id)
 );
