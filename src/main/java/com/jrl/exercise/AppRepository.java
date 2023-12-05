@@ -3,7 +3,14 @@ package com.jrl.exercise;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SqlInOutParameter;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
+
+import javax.sql.RowSet;
+import java.sql.ResultSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class AppRepository {
@@ -27,15 +34,15 @@ public class AppRepository {
             "                                                        order by employee_count desc limit 1";
     private static final String GET_EMPLOYEES_IN_SPECIFIC_DEPT_QUERY = "select * from employees emp " +
             "                                                               join departments dep on emp.departmentId = dep.id " +
-            "                                                           where dep.departmentName = '?'";
+            "                                                           where dep.departmentName = ?";
     private static final String GET_EMPLOYEES_WITHIN_RANGE_QUERY = "select * from employees where age between ? and ?";
     private static final String GET_EMPLOYEES_IN_SPECIFIC_DEPT_YOUNGER_THAN_SPECIFIC_AGE_QUERY = "select * from employees emp " +
             "                                                                                       join departments dep on emp.departmentId = dep.id " +
-            "                                                                                     where dep.departmentName = '?'" +
+            "                                                                                     where dep.departmentName = ?" +
             "                                                                                     and emp.age < ?";
     private static final String GET_EMPLOYEES_OLDER_THAN_SPECIFIC_AGE_NOT_IN_SPECIFIC_DEPT_QUERY = "select * from employees emp " +
             "                                                                                           join departments dep on emp.departmentId = dep.id " +
-            "                                                                                       where dep.departmentName != '?'" +
+            "                                                                                       where dep.departmentName != ?" +
             "                                                                                       and emp.age > ?";
 
 
@@ -58,6 +65,14 @@ public class AppRepository {
         jdbcTemplate.update(EMPLOYEE_DELETE_QUERY, id);
     }
 
+    public List<Object[]> getDepartmentWithMaxEmployees() {
+        return jdbcTemplate.queryForList(GET_DEPT_WITH_MAX_EMPLOYEES_QUERY)
+                .stream().map(row -> row.values().toArray(new Object[row.size()])).collect(Collectors.toList());
+    }
 
+    public List<Object[]> getEmployeesInSpecificDepartment(String departmentName) {
+        return jdbcTemplate.queryForList(GET_EMPLOYEES_IN_SPECIFIC_DEPT_QUERY, departmentName)
+                .stream().map(row -> row.values().toArray(new Object[row.size()])).collect(Collectors.toList());
+    }
 
 }

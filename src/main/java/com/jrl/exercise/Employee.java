@@ -1,6 +1,5 @@
 package com.jrl.exercise;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
