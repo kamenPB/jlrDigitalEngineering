@@ -1,6 +1,8 @@
 package com.jrl.exercise;
 
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -10,7 +12,7 @@ import javax.persistence.PersistenceContext;
 @Transactional
 public class AppRepositoryJpa {
 
-    @PersistenceContext
+    @Autowired
     public EntityManager entityManager;
 
     public void insertDepartment(Department department) {

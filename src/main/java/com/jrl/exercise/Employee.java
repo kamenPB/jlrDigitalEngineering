@@ -18,16 +18,16 @@ public class Employee {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="departmentId")
-    private long departmentId;
+    private Department department; // department object
 
     public Employee() {
 
     }
 
-    public Employee(String name, int age, long departmentId) {
+    public Employee(String name, int age, Department department) {
         this.name = name;
         this.age = age;
-        this.departmentId = departmentId;
+        this.department = department;
     }
 
     public long getId() {
