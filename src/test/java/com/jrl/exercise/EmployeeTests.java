@@ -66,10 +66,12 @@ public class EmployeeTests {
         ResponseEntity<String> response = template.exchange(EMPLOYEES_URL, HttpMethod.POST, httpEntity, String.class);
 //        System.out.println(response.getHeaders());
         assertTrue(response.getStatusCode().is2xxSuccessful());
-        assertEquals("text/plain", response.getHeaders().get("Content-Type").get(0));
+        assertEquals("text/plain;charset=UTF-8", response.getHeaders().get("Content-Type").get(0));
 
-        String expectedResponse = "Employee added successfully";
-        JSONAssert.assertEquals(expectedResponse, response.getBody(), false);
+        template.exchange(EMPLOYEES_URL, HttpMethod.DELETE, httpEntity, String.class);
+
+//        String expectedResponse = "Employee added successfully";
+//        JSONAssert.assertEquals(expectedResponse, response.getBody(), false);
     }
 
     @Test

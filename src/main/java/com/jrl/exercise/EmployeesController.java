@@ -20,6 +20,11 @@ public class EmployeesController {
         return employeeService.getAllEmployees();
     }
 
+    @RequestMapping(value = "/employees", method = RequestMethod.DELETE)
+    public void deleteEmployee(@RequestBody Employee employee) {
+        employeeService.deleteEmployeeById(employee.getId());
+    }
+
     @RequestMapping("/employees/{department}")
     public List<Employee> getEmployeesByDepartment(@PathVariable String department) {
         return employeeService.getAllEmployeesByDepartment(department);
